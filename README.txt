@@ -5,10 +5,10 @@ this is simply done by running the command in the terminal: go get github.com/ak
 
 If you want to compile.
 Os names are: windows = "windows", linux = "linux", mac = "darwin".
-To cross compile you have to choose which os you want to compile to by writing: "go env -w GOOS='Os name'."
-You have to set your current os by writing: "go env -w GOHOSTOS='Os name'."
+To cross compile you have to choose which os you want to compile to by writing: "go env -w GOOS='Os name'".
+You have to set your current os by writing: "go env -w GOHOSTOS='Os name'".
 Then just write : "go build", and it will be added in the directory as Linter.exe.
-The other option is to run : "go install.",
+The other option is to run : "go install",
 this will create an executable that will be usable independent of which file you're in with the name Linter.exe.
 To give custom names to these just add "-o newFile.exe" as a flag.
 
@@ -28,6 +28,6 @@ after - bool value that is true if the exception is after the rule and false if 
 
 
 If you want to run the linter.
-You could either run an executable or write: "go run main.go."
+You could either run an executable or write: "go run main.go".
 Run the program empty to see arguments, arguments inbetween brackets are optional.
 In the arguments you have to specify the -f file and -n newFile extentions(acceptable excetions are: ".tex", ".bibz", ".tikz").
