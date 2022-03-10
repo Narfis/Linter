@@ -132,7 +132,6 @@ func DoTheRules(line string, rules rulesReader.Rules, rule rulesReader.Rule, ind
 		if rule.Space {
 			endofLine = AddSpace(endofLine, rule, lineToLint)
 			*headerSpaces = true
-
 		}
 	}
 
