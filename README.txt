@@ -1,6 +1,6 @@
 Requirements.
 You may have to install the argparser,
-this is simply done by running the command in the terminal: go get github.com/akamensky/argparse
+this is simply done by running the command in the terminal: "go get github.com/akamensky/argparse"
 
 
 If you want to compile.
