@@ -1,0 +1,33 @@
+{
+  "rules": [
+    {
+      "id": "%",
+      "spaceAfter": true
+    },
+    {
+      "id": "\\begin",
+      "indentComingLines" : 1
+    },
+    {
+      "id" : "\\end",
+      "indentComingLines" : -1
+    }, {
+      "id" : "\\section",
+      "addBlankLinesBefore" : true
+    } , {
+      "id" : "\\chapter",
+      "addBlankLinesBefore" : true
+    }
+  ],
+  "blanklines" : 5,
+
+  "exceptions" : [
+    {
+      "exception" : "\\",
+      "after" : false
+    }, {
+      "exception" : "{document}",
+      "after" : true
+    }
+  ]
+}
