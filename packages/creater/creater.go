@@ -6,13 +6,12 @@ import (
 	"path"
 )
 
-func CreateFile(file string, acceptedFormats map[string]bool) {
+func CreateFile(file string, acceptedFormats map[string]bool) error {
 	if acceptedFormats[path.Ext(file)] {
 		os.Create(file)
-		return
+		return nil
 	}
-	fmt.Println("The output isn't a .tex file, exiting")
-	os.Exit(0)
+	return fmt.Errorf("file you're trying to create is not within acceptedFormats")
 }
 
 func FileExists(file string) bool {

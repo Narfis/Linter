@@ -6,6 +6,7 @@ import (
 	"Linter/packages/rulesReader"
 	"Linter/packages/writer"
 	"fmt"
+	"log"
 	"os"
 	"strings"
 )
@@ -289,7 +290,7 @@ func AddBlankLines(lines string, spaces *int) string {
 	return lines
 }
 
-func DoLint(readFrom string, writeTo string, rules rulesReader.Rules, headers bool) {
+func DoLint(readFrom string, writeTo string, rules rulesReader.Rules, headers bool) error {
 	if file.FileExists(readFrom) {
 		acceptedFormats := map[string]bool{
 			".tex":  true,
@@ -297,14 +298,17 @@ func DoLint(readFrom string, writeTo string, rules rulesReader.Rules, headers bo
 			".tikz": true,
 		}
 		theFile := reader.ReadFile(readFrom, acceptedFormats)
-		file.CreateFile(writeTo, acceptedFormats)
+		err := file.CreateFile(writeTo, acceptedFormats)
+		if err != nil {
+			log.Fatal(err)
+		}
 		openFile := writer.OpenFile(writeTo)
 
 		ModifyOutput(rules, theFile, openFile, headers)
 
 		openFile.Close()
-		return
+		return nil
 	}
 	fmt.Println("Input file doesn't exist")
-	os.Exit(0)
+	return fmt.Errorf("input doesn't exist")
 }

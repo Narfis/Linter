@@ -28,6 +28,5 @@ func ReadFile(text string, acceptedFormats map[string]bool) []string {
 	}
 	fmt.Println("Not a valid file to read from")
 	fmt.Println("Try again with a format within the acceptedFormats map")
-	os.Exit(0)
 	return nil
 }

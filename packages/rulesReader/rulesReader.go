@@ -31,7 +31,7 @@ type Exception struct {
 //go:embed rules.json
 var embededRules []byte
 
-func ReadJson(file string) Rules {
+func ReadJson(file string) (Rules, error) {
 	acceptedFormats := map[string]bool{
 		".yaml": true,
 		".json": true,
@@ -53,17 +53,18 @@ func ReadJson(file string) Rules {
 				log.Fatal(jsonErr)
 			}
 			file.Close()
-			return rules
+			return rules, nil
 		}
 		fmt.Println("Not a .yaml or .json file\nTry again with a .json or .yaml file")
-		os.Exit(0)
-		return Rules{}
+		return Rules{}, fmt.Errorf("extention not within acceptedFormats")
 	}
-
-	var rules Rules
-	err := json.Unmarshal(embededRules, &rules)
-	if err != nil {
-		log.Fatal(err)
+	if file == "" {
+		var rules Rules
+		err := json.Unmarshal(embededRules, &rules)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return rules, nil
 	}
-	return rules
+	return Rules{}, fmt.Errorf("rule file doesn't exist")
 }

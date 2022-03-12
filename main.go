@@ -4,6 +4,7 @@ import (
 	"Linter/packages/rulesReader"
 	linter "Linter/packages/theLinter"
 	"fmt"
+	"log"
 	"os"
 	"time"
 
@@ -22,9 +23,16 @@ func main() {
 		fmt.Println(parser.Usage(err))
 		return
 	}
-	theRules := rulesReader.ReadJson(*rules)
+	fmt.Println(*rules)
+	theRules, err := rulesReader.ReadJson(*rules)
+	if err != nil {
+		log.Fatal(err)
+	}
 	startTime := time.Now()
-	linter.DoLint(*file, *newFile, theRules, *headers)
+	err = linter.DoLint(*file, *newFile, theRules, *headers)
+	if err != nil {
+		log.Fatal(err)
+	}
 	duration := time.Since(startTime)
 	fmt.Println("The program finished in:", duration.Seconds(), "seconds")
 }
