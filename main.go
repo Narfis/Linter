@@ -29,10 +29,7 @@ func main() {
 		log.Fatal(err)
 	}
 	startTime := time.Now()
-	err = linter.DoLint(*file, *newFile, theRules, *headers)
-	if err != nil {
-		log.Fatal(err)
-	}
+	linter.DoLint(*file, *newFile, theRules, *headers)
 	duration := time.Since(startTime)
 	fmt.Println("The program finished in:", duration.Seconds(), "seconds")
 }

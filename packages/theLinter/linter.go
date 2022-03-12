@@ -290,25 +290,23 @@ func AddBlankLines(lines string, spaces *int) string {
 	return lines
 }
 
-func DoLint(readFrom string, writeTo string, rules rulesReader.Rules, headers bool) error {
-	if file.FileExists(readFrom) {
-		acceptedFormats := map[string]bool{
-			".tex":  true,
-			".bibz": true,
-			".tikz": true,
-		}
-		theFile := reader.ReadFile(readFrom, acceptedFormats)
-		err := file.CreateFile(writeTo, acceptedFormats)
-		if err != nil {
-			log.Fatal(err)
-		}
-		openFile := writer.OpenFile(writeTo)
-
-		ModifyOutput(rules, theFile, openFile, headers)
-
-		openFile.Close()
-		return nil
+func DoLint(readFrom string, writeTo string, rules rulesReader.Rules, headers bool) {
+	acceptedFormats := map[string]bool{
+		".tex":  true,
+		".bibz": true,
+		".tikz": true,
 	}
-	fmt.Println("Input file doesn't exist")
-	return fmt.Errorf("input doesn't exist")
+	theFile, err := reader.ReadFile(readFrom, acceptedFormats)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = file.CreateFile(writeTo, acceptedFormats)
+	if err != nil {
+		log.Fatal(err)
+	}
+	openFile := writer.OpenFile(writeTo)
+
+	ModifyOutput(rules, theFile, openFile, headers)
+
+	openFile.Close()
 }

@@ -1,17 +1,21 @@
 package reader
 
 import (
+	"Linter/packages/creater"
 	"bufio"
+	"errors"
 	"fmt"
 	"log"
 	"os"
 	"path"
 )
 
-func ReadFile(text string, acceptedFormats map[string]bool) []string {
-
-	if acceptedFormats[path.Ext(text)] || acceptedFormats == nil {
-		f, e := os.Open(text)
+func ReadFile(file string, acceptedFormats map[string]bool) ([]string, error) {
+	if !creater.FileExists(file) {
+		return nil, errors.New("input file doesn't exist")
+	}
+	if acceptedFormats[path.Ext(file)] || acceptedFormats == nil {
+		f, e := os.Open(file)
 
 		if e != nil {
 			log.Fatal(e)
@@ -24,9 +28,7 @@ func ReadFile(text string, acceptedFormats map[string]bool) []string {
 			textlines = append(textlines, (scanner.Text() + "\n"))
 		}
 		f.Close()
-		return textlines
+		return textlines, nil
 	}
-	fmt.Println("Not a valid file to read from")
-	fmt.Println("Try again with a format within the acceptedFormats map")
-	return nil
+	return nil, fmt.Errorf("not an accepted extention")
 }
