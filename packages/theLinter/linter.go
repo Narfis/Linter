@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+//Modifies the lines.
 func ModifyOutput(rules rulesReader.Rules, text []string, file *os.File, headers bool) {
 	var indents int
 	var removeEmpty int
@@ -26,15 +27,16 @@ func ModifyOutput(rules rulesReader.Rules, text []string, file *os.File, headers
 		lines = strings.TrimLeft(lines, " ")
 		lines = strings.TrimLeft(lines, "\t")
 		lines = AddIndents(lines, indents)
-		lines = AddBlankLines(lines, &removeEmpty)
+		lines = RemoveBlankLines(lines, &removeEmpty)
 		for i := 0; i < len(rules.Rules); i++ {
 			if strings.Contains(lines, rules.Rules[i].Id) {
 				lines = DoTheRules(lines, rules, rules.Rules[i], &indents, &headerSpaces, &headerBlankLines)
 			}
 		}
 		lines = NewlineAfterDot(lines, indents, ". ", ".\n")
+		//If removeEmpty which is counted in RemoveBlankLines is grater than 1 don't write it out.
 		if removeEmpty <= 1 {
-			writer.WriteToNew(lines, file)
+			writer.WriteTo(lines, file)
 		}
 	}
 
@@ -44,6 +46,7 @@ func ModifyOutput(rules rulesReader.Rules, text []string, file *os.File, headers
 	}
 }
 
+//Writes out the headers
 func WriteOutHeaders(headerTracker []bool) {
 	if headerTracker[0] {
 		fmt.Println("* Indents are added")
@@ -57,15 +60,17 @@ func WriteOutHeaders(headerTracker []bool) {
 	}
 }
 
+//Adds some amount of newlines before a line
 func AddLinesBefore(line string, blanks int) string {
 	line = strings.Repeat("\n", blanks) + line
 	return line
 }
 
+//Applies the rules to the lines, avoids exceptions and everything after a real comment
 func DoTheRules(line string, rules rulesReader.Rules, rule rulesReader.Rule, indents *int, headerSpaces *bool, headerBlankLines *bool) string {
 	exception := FindExceptions(line, rules, rule.Id)
 	realComment := IndexRealComment(line)
-	if realComment == 0 {
+	if realComment == -1 {
 		realComment = len(line)
 	}
 	lineToLint := line[:realComment]
@@ -140,6 +145,7 @@ func DoTheRules(line string, rules rulesReader.Rules, rule rulesReader.Rule, ind
 	return lineToLint
 }
 
+//Looks for exception within a line and points out what exception it is.
 func FindExceptions(lines string, exception rulesReader.Rules, ruleID string) string {
 	for i := 0; i < len(exception.Exceptions); i++ {
 		if strings.Contains(lines, ruleID+exception.Exceptions[i].Exception) && exception.Exceptions[i].After {
@@ -152,6 +158,7 @@ func FindExceptions(lines string, exception rulesReader.Rules, ruleID string) st
 	return ""
 }
 
+//Remove duplicates in an int array
 func RemoveDuplicateValues(intSlice []int) []int {
 	keys := make(map[int]bool)
 	list := []int{}
@@ -165,15 +172,16 @@ func RemoveDuplicateValues(intSlice []int) []int {
 	return list
 }
 
+//This function finds the real comment by counting real and fake comments, (faked defined by \\%)
 func IndexRealComment(line string) int {
 	commentCount := strings.Count(line, "%")
-
+	fakeCount := strings.Count(line, "\\%")
 	totalIndex := 0
 	copyline := line
 	for i := 0; i < commentCount; i++ {
 		commentIndex := strings.Index(copyline, "%")
 		fakeIndex := strings.Index(copyline, "\\%")
-		if fakeIndex+1 == commentIndex {
+		if fakeIndex+1 == commentIndex && fakeCount > 0 {
 			copyline = copyline[commentIndex+1:]
 			totalIndex += commentIndex + 1
 		} else {
@@ -181,9 +189,10 @@ func IndexRealComment(line string) int {
 			return totalIndex
 		}
 	}
-	return 0
+	return -1
 }
 
+//This function adds a newline after a dot with a space after, also adds the amount of tabs the nextline should have and ignores everything beyond %.
 func NewlineAfterDot(lines string, indents int, stringToReplace string, stringReplacer string) string {
 	commentCount := strings.Count(lines, "%")
 	fakeCount := strings.Count(lines, "\\%")
@@ -192,6 +201,9 @@ func NewlineAfterDot(lines string, indents int, stringToReplace string, stringRe
 	if commentCount > fakeCount {
 
 		totalIndex := IndexRealComment(lines)
+		if totalIndex < 1 {
+			return lines
+		}
 		copyTotal := totalIndex - 1
 		if copyTotal > 0 {
 			currVal := lines[copyTotal]
@@ -221,10 +233,12 @@ func NewlineAfterDot(lines string, indents int, stringToReplace string, stringRe
 	return lines
 }
 
+//Counts spaces before the first letter.
 func CountLeadingSpaces(line string) int {
 	return len(line) - len(strings.TrimLeft(line, " "))
 }
 
+//Remove spaces in line that
 func RemoveSpaces(lines string, toFind string) string {
 	var indexFound []int
 	copy := lines
@@ -256,12 +270,14 @@ func RemoveSpaces(lines string, toFind string) string {
 	return lines
 }
 
+//Adds indents
 func AddIndents(lines string, indents int) string {
 	index := strings.Count(lines, "\n") - 1
 	lines = lines[:index] + strings.Repeat("\t", indents) + lines[index:]
 	return lines
 }
 
+//Adds spaces before and after a rules.Id
 func AddSpace(lines string, rules rulesReader.Rule, beforeComment string) string {
 	index := strings.Index(lines, "%")
 	before := ""
@@ -280,7 +296,8 @@ func AddSpace(lines string, rules rulesReader.Rule, beforeComment string) string
 	return lines
 }
 
-func AddBlankLines(lines string, spaces *int) string {
+//Count blanklines
+func RemoveBlankLines(lines string, spaces *int) string {
 	if lines[0] == '\n' {
 		*spaces += 1
 	} else {
@@ -290,6 +307,7 @@ func AddBlankLines(lines string, spaces *int) string {
 	return lines
 }
 
+//Does all the preperation and checks so that files exist and is the right format before it starts modifying the lines.
 func DoLint(readFrom string, writeTo string, rules rulesReader.Rules, headers bool) {
 	acceptedFormats := map[string]bool{
 		".tex":  true,

@@ -23,7 +23,6 @@ func main() {
 		fmt.Println(parser.Usage(err))
 		return
 	}
-	fmt.Println(*rules)
 	theRules, err := rulesReader.ReadJson(*rules)
 	if err != nil {
 		log.Fatal(err)

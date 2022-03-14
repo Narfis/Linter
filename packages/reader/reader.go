@@ -10,6 +10,7 @@ import (
 	"path"
 )
 
+//Reads from a file and returns its content to a []string
 func ReadFile(file string, acceptedFormats map[string]bool) ([]string, error) {
 	if !creater.FileExists(file) {
 		return nil, errors.New("input file doesn't exist")

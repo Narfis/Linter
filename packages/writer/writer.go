@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+//Opens a file that can be written to.
 func OpenFile(toFile string) *os.File {
 	file, err := os.OpenFile(toFile, os.O_RDWR|os.O_APPEND, 0660)
 	if err != nil {
@@ -14,8 +15,8 @@ func OpenFile(toFile string) *os.File {
 	return file
 }
 
-func WriteToNew(text string, f *os.File) {
-
+//Writes to file
+func WriteTo(text string, f *os.File) {
 	_, err := io.WriteString(f, text)
 
 	if err != nil {
