@@ -2,6 +2,7 @@ package main
 
 import (
 	"Linter/packages/reader"
+	"Linter/packages/rulesReader"
 	"errors"
 	"reflect"
 	"testing"
@@ -32,6 +33,25 @@ func TestRead(t *testing.T) {
 	}
 	for _, test := range tests {
 		_, err := reader.ReadFile(test.input, acceptedFormats)
+		if reflect.TypeOf(err) != reflect.TypeOf(test.expected) {
+			t.Errorf("Not correct, reader gave %s, while we were expecting %s", reflect.TypeOf(err), test.expected)
+		}
+	}
+
+}
+
+func TestReadJson(t *testing.T) {
+	var tests = []struct {
+		input    string
+		expected error
+	}{
+		{"packages/rulesReader/rules.json", nil},
+		{"rules.notJson", errors.New("")},
+		{"rules.yaml", errors.New("")},
+	}
+
+	for _, test := range tests {
+		_, err := rulesReader.ReadJson(test.input)
 		if reflect.TypeOf(err) != reflect.TypeOf(test.expected) {
 			t.Errorf("Not correct, reader gave %s, while we were expecting %s", reflect.TypeOf(err), test.expected)
 		}
