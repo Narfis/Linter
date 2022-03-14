@@ -28,9 +28,11 @@ type Exception struct {
 	After     bool   `json:"after"`
 }
 
+//If the rules.json is sent in empty it takes from the embedded rules.json.
 //go:embed rules.json
 var embededRules []byte
 
+//Reads a json file and stores it within the Rules struct.
 func ReadJson(file string) (Rules, error) {
 	acceptedFormats := map[string]bool{
 		".yaml": true,
