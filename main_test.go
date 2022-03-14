@@ -53,8 +53,7 @@ func TestReadJson(t *testing.T) {
 	for _, test := range tests {
 		_, err := rulesReader.ReadJson(test.input)
 		if reflect.TypeOf(err) != reflect.TypeOf(test.expected) {
-			t.Errorf("Not correct, reader gave %s, while we were expecting %s", reflect.TypeOf(err), test.expected)
+			t.Errorf("Not correct, rulesReader gave %s, while we were expecting %s", reflect.TypeOf(err), test.expected)
 		}
 	}
-
 }

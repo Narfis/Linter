@@ -16,9 +16,9 @@ func OpenFile(toFile string) *os.File {
 
 func WriteToNew(text string, f *os.File) {
 
-	_, err2 := io.WriteString(f, text)
+	_, err := io.WriteString(f, text)
 
-	if err2 != nil {
-		log.Fatal(err2)
+	if err != nil {
+		log.Fatal(err)
 	}
 }

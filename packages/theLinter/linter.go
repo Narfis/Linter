@@ -46,14 +46,14 @@ func ModifyOutput(rules rulesReader.Rules, text []string, file *os.File, headers
 
 func WriteOutHeaders(headerTracker []bool) {
 	if headerTracker[0] {
-		fmt.Println("Added indents")
+		fmt.Println("* Indents are added")
 	}
 	if headerTracker[1] {
-		fmt.Println("Added spaces")
+		fmt.Println("* Spaces are added")
 
 	}
 	if headerTracker[2] {
-		fmt.Println("Added blanklines")
+		fmt.Println("* Blanklines are added")
 	}
 }
 
