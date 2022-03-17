@@ -4,12 +4,12 @@
 ## Compile
 Os names are: windows = "windows", linux = "linux", mac = "darwin".
 
-To cross compile you have to choose which os you want to compile to by writing: "go env -w GOOS='Os name'".
-You have to set your current os by writing: "go env -w GOHOSTOS='Os name'".
-Then just write : "go build", and it will be added in the directory as Linter.exe.
-The other option is to run : "go install",
-this will create an executable that will be usable independent of which file you're in with the name Linter.exe.
-To give custom names to these just add "-o newFile.exe" as a flag.
+To cross compile you have to choose which os you want to compile to by writing: "go env -w GOOS='Os name'".  
+You have to set your current os by writing: "go env -w GOHOSTOS='Os name'".  
+Then just write : "go build", and it will be added in the directory as Linter.exe.  
+The other option is to run : "go install",  
+this will create an executable that will be usable independent of which file you're in with the name Linter.exe.  
+To give custom names to these just add "-o newFile.exe" as a flag.  
 
 
 ## Custom Ruleset
