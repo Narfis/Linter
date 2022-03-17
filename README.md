@@ -3,7 +3,8 @@
 
 This is a simple LaTeX linter
 
-## 
+## Githubs used
+https://github.com/akamensky/argparse
 
 ## Compile
 Os names are: windows = "windows", linux = "linux", mac = "darwin".
