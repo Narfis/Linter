@@ -1,7 +1,7 @@
 
 # Linter
 
-## Compilation
+## Compile
 Os names are: windows = "windows", linux = "linux", mac = "darwin".
 
 To cross compile you have to choose which os you want to compile to by writing: "go env -w GOOS='Os name'".
