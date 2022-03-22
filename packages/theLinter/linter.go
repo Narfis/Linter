@@ -311,7 +311,7 @@ func RemoveBlankLines(lines string, spaces *int) string {
 func DoLint(readFrom string, writeTo string, rules rulesReader.Rules, headers bool) {
 	acceptedFormats := map[string]bool{
 		".tex":  true,
-		".bibz": true,
+		".bib":  true,
 		".tikz": true,
 	}
 	theFile, err := reader.ReadFile(readFrom, acceptedFormats)
